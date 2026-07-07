@@ -10,16 +10,16 @@ if (!slider) {
   throw new Exception("Slider not found");
 }
 
-const w = canvas.getAttribute("width");
-const h = canvas.getAttribute("height");
+const w = parseFloat(canvas.getAttribute("width"));
+const h = parseFloat(canvas.getAttribute("height"));
 const ctx = canvas.getContext("2d");
 
 class LineQueue {
   q = [];
 
-  constructor(lines) {
-    this.q.push(...lines);
-  }
+  // constructor(lines) {
+  //   this.q.push(...lines);
+  // }
 
   front() {
     return this.q.length > 0 ? this.q[0] : null;
@@ -31,6 +31,12 @@ class LineQueue {
 
   pop() {
     return this.q.shift();
+  }
+
+  *iter() {
+    for (let line of this.q) {
+      yield line;
+    }
   }
 }
 
@@ -49,19 +55,17 @@ class VecMath {
     };
   }
 
-  // static transform(u, translation, angle) {
-  //   return {
-
-  //   };
-  // }
-
-  static lerp(u, v, factor) {
-    const diff = VecMath.sub(v, u);
+  static transform(u, translation, angle) {
+    const theta = (angle / 180.0) * Math.PI;
 
     return {
-      x: VecMath.scale(diff.x, factor),
-      y: VecMath.scale(diff.y, factor),
+      x: u.x * Math.cos(theta) - u.y * Math.sin(theta) + translation.x,
+      y: u.x * Math.sin(theta) + u.y * Math.cos(theta) + translation.y,
     };
+  }
+
+  static lerp(u, v, factor) {
+    return VecMath.scale(VecMath.sub(v, u), factor);
   }
 }
 
@@ -71,14 +75,31 @@ class KochFractalSolver {
   solve(line) {
     this.q.push(line);
 
+    const onethirdFactor = 1.0 / 3.0;
+    const twothirdsFactor = 1.0 / 3.0;
+    const peakAngle = 30.0;
+
     // solving the fractal until only primitive elements remain
     // i.e. elements with level = 0, which are straight lines
     while (this.q.front().level > 0) {
       // guaranteed that level > 0
       const line = this.q.pop();
 
-      // const onethird = this.q.push({});
+      const onethird = VecMath.lerp(line.from, line.to, onethirdFactor);
+      const twothirds = VecMath.lerp(line.from, line.to, twothirdsFactor);
+      const peak = VecMath.transform(onethird, onethird, peakAngle);
+
+      // from -> onethird
+      this.q.push({
+        from: line.from,
+        to: onethird,
+        level: line.level - 1,
+      });
     }
+  }
+
+  getQueue() {
+    return this.q;
   }
 }
 
@@ -100,6 +121,12 @@ function drawKochFractal(level) {
     to: { x: w, y: h / 2 },
     level,
   });
+
+  console.log("solved:", solver.getQueue());
+
+  for (let line of solver.getQueue().iter()) {
+    drawLine(ctx, line.from, line.to);
+  }
 }
 
 slider.addEventListener("change", (e) => drawKochFractal(e.target.value));
