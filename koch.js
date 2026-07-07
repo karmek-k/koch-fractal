@@ -41,6 +41,13 @@ class LineQueue {
 }
 
 class VecMath {
+  static add(u, v) {
+    return {
+      x: u.x + v.x,
+      y: u.y + v.y,
+    };
+  }
+
   static sub(u, v) {
     return {
       x: u.x - v.x,
@@ -65,7 +72,9 @@ class VecMath {
   }
 
   static lerp(u, v, factor) {
-    return VecMath.scale(VecMath.sub(v, u), factor);
+    const scaled = VecMath.scale(VecMath.sub(v, u), factor);
+
+    return VecMath.add(scaled, u);
   }
 }
 
