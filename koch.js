@@ -34,6 +34,29 @@ class LineQueue {
   }
 }
 
+// class VecMath {
+//   static sub(u, v) {
+//     return { x: }
+//   }
+// }
+
+class KochFractalSolver {
+  q = new LineQueue();
+
+  solve(line) {
+    this.q.push(line);
+
+    // solving the fractal until only primitive elements remain
+    // i.e. elements with level = 0, which are straight lines
+    while (this.q.front().level > 0) {
+      // guaranteed that level > 0
+      const line = this.q.pop();
+
+      // const onethird = this.q.push({});
+    }
+  }
+}
+
 function drawLine(ctx, from, to) {
   ctx.moveTo(from.x, from.y);
   ctx.lineTo(to.x, to.y);
@@ -45,19 +68,13 @@ function drawKochFractal(level) {
   ctx.fillRect(0, 0, w, h);
   ctx.fillStyle = "white";
 
-  const lines = new LineQueue([
-    {
-      from: { x: 0, y: h / 2 },
-      to: { x: w, y: h / 2 },
-      level,
-    },
-  ]);
-  console.log(lines);
+  const solver = new KochFractalSolver();
 
-  // compute all lines contained in the fractal
-  // while (lines.canCompute()) {
-  //   lines.compute();
-  // }
+  solver.solve({
+    from: { x: 0, y: h / 2 },
+    to: { x: w, y: h / 2 },
+    level,
+  });
 }
 
 slider.addEventListener("change", (e) => drawKochFractal(e.target.value));
