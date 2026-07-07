@@ -10,16 +10,12 @@ if (!slider) {
   throw new Exception("Slider not found");
 }
 
-const w = parseFloat(canvas.getAttribute("width"));
-const h = parseFloat(canvas.getAttribute("height"));
+const w = parseFloat(canvas.width);
+const h = parseFloat(canvas.height);
 const ctx = canvas.getContext("2d");
 
 class LineQueue {
   q = [];
-
-  // constructor(lines) {
-  //   this.q.push(...lines);
-  // }
 
   front() {
     return this.q.length > 0 ? this.q[0] : null;
@@ -86,7 +82,7 @@ class KochFractalSolver {
 
     const onethirdFactor = 1.0 / 3.0;
     const twothirdsFactor = 2.0 / 3.0;
-    const peakAngle = 60.0;
+    const peakAngle = -60.0;
 
     // solving the fractal until only primitive elements remain
     // i.e. elements with level = 0, which are straight lines
@@ -151,12 +147,10 @@ function drawKochFractal(level) {
   const solver = new KochFractalSolver();
 
   solver.solve({
-    from: { x: 0, y: h / 2 },
-    to: { x: w, y: h / 2 },
+    from: { x: 0, y: h },
+    to: { x: w, y: h },
     level,
   });
-
-  console.log("solved:", solver.getQueue());
 
   for (let line of solver.getQueue().iter()) {
     drawLine(ctx, line.from, line.to);
