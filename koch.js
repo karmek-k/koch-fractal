@@ -63,7 +63,7 @@ class VecMath {
   }
 
   static transform(u, translation, angle) {
-    const theta = (angle / 180.0) * Math.PI;
+    const theta = (angle * Math.PI) / 180.0;
 
     return {
       x: u.x * Math.cos(theta) - u.y * Math.sin(theta) + translation.x,
@@ -86,7 +86,7 @@ class KochFractalSolver {
 
     const onethirdFactor = 1.0 / 3.0;
     const twothirdsFactor = 2.0 / 3.0;
-    const peakAngle = 30.0;
+    const peakAngle = 60.0;
 
     // solving the fractal until only primitive elements remain
     // i.e. elements with level = 0, which are straight lines
@@ -96,7 +96,11 @@ class KochFractalSolver {
 
       const onethird = VecMath.lerp(line.from, line.to, onethirdFactor);
       const twothirds = VecMath.lerp(line.from, line.to, twothirdsFactor);
-      const peak = VecMath.transform(onethird, onethird, peakAngle);
+      const peak = VecMath.transform(
+        VecMath.sub(onethird, line.from),
+        onethird,
+        peakAngle,
+      );
 
       // from -> onethird
       this.q.push({
@@ -134,15 +138,15 @@ class KochFractalSolver {
 }
 
 function drawLine(ctx, from, to) {
+  ctx.beginPath();
   ctx.moveTo(from.x, from.y);
   ctx.lineTo(to.x, to.y);
-  ctx.moveTo(0, 0);
+  ctx.stroke();
 }
 
 function drawKochFractal(level) {
-  ctx.fillStyle = "black";
-  ctx.fillRect(0, 0, w, h);
   ctx.fillStyle = "white";
+  ctx.fillRect(0, 0, w, h);
 
   const solver = new KochFractalSolver();
 
