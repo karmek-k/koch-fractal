@@ -14,9 +14,29 @@ const w = canvas.getAttribute("width");
 const h = canvas.getAttribute("height");
 const ctx = canvas.getContext("2d");
 
-function drawLine(ctx, beginning, end) {
-  ctx.moveTo(beginning.x, beginning.y);
-  ctx.lineTo(end.x, end.y);
+class LineQueue {
+  q = [];
+
+  constructor(lines) {
+    this.q.push(...lines);
+  }
+
+  front() {
+    return this.q.length > 0 ? this.q[0] : null;
+  }
+
+  push(line) {
+    this.q.push(line);
+  }
+
+  pop() {
+    return this.q.shift();
+  }
+}
+
+function drawLine(ctx, from, to) {
+  ctx.moveTo(from.x, from.y);
+  ctx.lineTo(to.x, to.y);
   ctx.moveTo(0, 0);
 }
 
@@ -24,12 +44,22 @@ function drawKochFractal(level) {
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, w, h);
   ctx.fillStyle = "white";
-  console.log(`Draw koch fractal at level ${level}`);
-  // ...
+
+  const lines = new LineQueue([
+    {
+      from: { x: 0, y: h / 2 },
+      to: { x: w, y: h / 2 },
+      level,
+    },
+  ]);
+  console.log(lines);
+
+  // compute all lines contained in the fractal
+  // while (lines.canCompute()) {
+  //   lines.compute();
+  // }
 }
 
-slider.addEventListener("change", (e) => {
-  drawKochFractal(e.target.value);
-});
+slider.addEventListener("change", (e) => drawKochFractal(e.target.value));
 
 drawKochFractal(1);
