@@ -34,11 +34,36 @@ class LineQueue {
   }
 }
 
-// class VecMath {
-//   static sub(u, v) {
-//     return { x: }
-//   }
-// }
+class VecMath {
+  static sub(u, v) {
+    return {
+      x: u.x - v.x,
+      y: u.y - v.y,
+    };
+  }
+
+  static scale(u, factor) {
+    return {
+      x: u.x * factor,
+      y: u.y * factor,
+    };
+  }
+
+  // static transform(u, translation, angle) {
+  //   return {
+
+  //   };
+  // }
+
+  static lerp(u, v, factor) {
+    const diff = VecMath.sub(v, u);
+
+    return {
+      x: VecMath.scale(diff.x, factor),
+      y: VecMath.scale(diff.y, factor),
+    };
+  }
+}
 
 class KochFractalSolver {
   q = new LineQueue();
