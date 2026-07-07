@@ -85,7 +85,7 @@ class KochFractalSolver {
     this.q.push(line);
 
     const onethirdFactor = 1.0 / 3.0;
-    const twothirdsFactor = 1.0 / 3.0;
+    const twothirdsFactor = 2.0 / 3.0;
     const peakAngle = 30.0;
 
     // solving the fractal until only primitive elements remain
@@ -102,6 +102,27 @@ class KochFractalSolver {
       this.q.push({
         from: line.from,
         to: onethird,
+        level: line.level - 1,
+      });
+
+      // onethird -> peak
+      this.q.push({
+        from: onethird,
+        to: peak,
+        level: line.level - 1,
+      });
+
+      // peak -> twothirds
+      this.q.push({
+        from: peak,
+        to: twothirds,
+        level: line.level - 1,
+      });
+
+      // twothirds -> to
+      this.q.push({
+        from: twothirds,
+        to: line.to,
         level: line.level - 1,
       });
     }
