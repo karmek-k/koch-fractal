@@ -165,8 +165,8 @@ function drawKochFractal(level) {
   const solver = new KochFractalSolver();
 
   solver.solve({
-    from: { x: 0, y: h },
-    to: { x: w, y: h },
+    from: { x: 0, y: h - 40 },
+    to: { x: w, y: h - 40 },
     level,
   });
 

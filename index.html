@@ -10,8 +10,22 @@
             <h1>Koch Fractal</h1>
         </header>
         <main>
-            <input id="slider" type="range" min="1" max="5" value="1" />
-            <canvas id="koch-canvas" width="800" height="300"></canvas>
+            <div class="fractal">
+                <canvas
+                    class="fractal__canvas"
+                    id="koch-canvas"
+                    width="1200"
+                    height="400"
+                ></canvas>
+                <input
+                    class="fractal__slider"
+                    id="slider"
+                    type="range"
+                    min="1"
+                    max="5"
+                    value="1"
+                />
+            </div>
         </main>
         <script src="/koch.js"></script>
     </body>
