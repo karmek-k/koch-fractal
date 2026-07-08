@@ -1,15 +1,29 @@
 body {
     margin: 0;
     padding: 0;
+
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-family: sans-serif;
+    justify-content: center;
+
+    font-family: "Electrolize", sans-serif;
 }
 
 main {
     display: flex;
     flex-direction: column;
+}
+
+.header {
+    font-size: 36pt;
+    font-weight: lighter;
+}
+
+.header__title {
+    margin: 0;
+    margin-bottom: 18px;
 }
 
 .fractal {
@@ -22,4 +36,8 @@ main {
 
 .fractal__canvas {
     width: 100%;
+}
+
+.fractal__slider {
+    margin: 18px 0;
 }
